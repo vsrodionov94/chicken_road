@@ -1,0 +1,82 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  opacity: 0.4;
+}
+
+.row.active {
+  opacity: 1;
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.row.passed {
+  opacity: 0.7;
+}
+
+.multiplier {
+  min-width: 70px;
+  text-align: right;
+}
+
+.multiplierValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-yellow);
+}
+
+.row.passed .multiplierValue {
+  color: var(--accent-green);
+}
+
+.cells {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex: 1;
+}
+
+.stepNumber {
+  min-width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.row.active .stepNumber {
+  background: var(--accent-yellow);
+  color: var(--bg-primary);
+}
+
+.row.passed .stepNumber {
+  background: var(--accent-green);
+  color: var(--bg-primary);
+}
+
+@media (max-width: 600px) {
+  .row {
+    gap: 8px;
+    padding: 6px 8px;
+  }
+
+  .multiplier {
+    min-width: 50px;
+  }
+
+  .multiplierValue {
+    font-size: 0.875rem;
+  }
+
+  .cells {
+    gap: 8px;
+  }
+}

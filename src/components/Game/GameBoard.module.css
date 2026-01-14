@@ -1,0 +1,94 @@
+.board {
+  position: relative;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 20px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.road {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 26, 0.85);
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.overlay p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.won p {
+  color: var(--accent-green);
+}
+
+.lost p {
+  color: var(--accent-red);
+}
+
+.winAmount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  animation: bounce 0.5s ease;
+}
+
+.loseAmount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-red);
+  animation: shake 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@media (max-width: 600px) {
+  .board {
+    padding: 12px;
+    min-height: 400px;
+  }
+
+  .overlay p {
+    font-size: 1.25rem;
+  }
+
+  .winAmount,
+  .loseAmount {
+    font-size: 2rem;
+  }
+}

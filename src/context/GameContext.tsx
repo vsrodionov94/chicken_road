@@ -2,7 +2,6 @@ import { createContext, useContext, useReducer, useCallback, type ReactNode } fr
 import { useTranslation } from 'react-i18next';
 import { useToast } from './ToastContext';
 import { GameStatus, GameResult, type GameState, type GameHistoryEntry } from '../types/game';
-import { MIN_CELL_COUNT, MAX_CELL_COUNT } from '../constants/game';
 import { gameReducer } from '../store/gameReducer';
 import { initialState } from '../store/initialState';
 import * as actions from '../store/gameActions';
@@ -12,11 +11,10 @@ import { calculateMultiplier } from '../utils/coefficients';
 interface GameContextValue {
   state: GameState;
   startNewGame: () => Promise<void>;
-  selectCell: (rowIndex: number, cellIndex: number) => Promise<void>;
+  continueGame: () => Promise<void>;
   cashoutGame: () => Promise<void>;
   resetGame: () => void;
   setBetAmount: (amount: number) => void;
-  setCellCount: (count: number) => void;
   getNextMultiplier: () => number;
 }
 
@@ -41,14 +39,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [state.betAmount, state.cellCount, state.balance, t, showToast]);
 
-  const selectCell = useCallback(
-    async (rowIndex: number, cellIndex: number) => {
+  const continueGame = useCallback(
+    async () => {
       if (!state.session || state.status !== GameStatus.Playing) return;
-      if (rowIndex !== state.currentStep) return;
 
       try {
-        const result = await makeStep(state.session.id, cellIndex);
-        dispatch(actions.makeStep(rowIndex, cellIndex, result));
+        const result = await makeStep(state.session.id);
+        dispatch(actions.makeStep(result));
 
         if (!result.success) {
           const entry: GameHistoryEntry = {
@@ -57,7 +54,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
             result: GameResult.Lost,
             multiplier: state.currentMultiplier,
             payout: 0,
-            steps: state.currentStep,
+            steps: Math.max(0, state.currentStep + 1), // +1 потому что мы сделали шаг перед проигрышем
             timestamp: Date.now(),
           };
           dispatch(actions.addHistoryEntry(entry));
@@ -71,7 +68,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const cashoutGame = useCallback(async () => {
     if (!state.session || state.status !== GameStatus.Playing) return;
-    if (state.currentStep === 0) return;
+    if (state.currentStep === -1) return; // Нельзя забрать деньги до первого хода
 
     try {
       const result = await cashout(state.session.id);
@@ -83,7 +80,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         result: GameResult.Won,
         multiplier: result.finalMultiplier,
         payout: result.amount,
-        steps: state.currentStep,
+        steps: state.currentStep + 1, // +1 потому что currentStep теперь начинается с -1
         timestamp: Date.now(),
       };
       dispatch(actions.addHistoryEntry(entry));
@@ -104,26 +101,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [state.status]
   );
 
-  const handleSetCellCount = useCallback(
-    (count: number) => {
-      if (state.status === GameStatus.Playing) return;
-      dispatch(actions.setCellCount(Math.min(MAX_CELL_COUNT, Math.max(MIN_CELL_COUNT, count))));
-    },
-    [state.status]
-  );
-
   const getNextMultiplier = useCallback(() => {
-    return calculateMultiplier(state.cellCount, state.currentStep + 1);
+    // Когда currentStep = -1, следующий шаг = 0, множитель для шага 0 = calculateMultiplier(cellCount, 1)
+    // Когда currentStep = 0, следующий шаг = 1, множитель для шага 1 = calculateMultiplier(cellCount, 2)
+    return calculateMultiplier(state.cellCount, state.currentStep + 2);
   }, [state.cellCount, state.currentStep]);
 
   const value: GameContextValue = {
     state,
     startNewGame,
-    selectCell,
+    continueGame,
     cashoutGame,
     resetGame: handleResetGame,
     setBetAmount: handleSetBetAmount,
-    setCellCount: handleSetCellCount,
     getNextMultiplier,
   };
 

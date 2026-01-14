@@ -27,7 +27,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         status: GameStatus.Playing,
         session: action.payload,
         rows: createInitialRows(action.payload.cellCount),
-        currentStep: 0,
+        currentStep: -1, // Начинаем со стартовой позиции (1.0x)
         currentMultiplier: 1,
         potentialWin: action.payload.bet,
         lastResult: null,
@@ -35,21 +35,23 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       };
 
     case ActionType.MakeStep: {
-      const { rowIndex, cellIndex, result } = action.payload;
+      const { result } = action.payload;
+      // rowIndex - это индекс ряда, на который кликнули (следующий шаг)
+      const rowIndex = state.currentStep + 1;
+      const safeIndex = result.safeIndex;
+
       const newRows = state.rows.map((row, idx) => {
         if (idx !== rowIndex) return row;
 
         const newCells: Cell[] = row.cells.map((cell, cIdx) => {
-          if (cIdx === cellIndex) {
+          if (cIdx === safeIndex) {
             return {
               ...cell,
               status: result.success ? CellStatus.Safe : CellStatus.Trap,
               isTrap: !result.success,
             };
           }
-          if (!result.success && cIdx === result.trapIndex) {
-            return { ...cell, status: CellStatus.Trap, isTrap: true };
-          }
+          // Если проиграли, показываем все остальные ячейки как безопасные
           if (!result.success) {
             return { ...cell, status: CellStatus.Safe };
           }
@@ -60,7 +62,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
           ...row,
           cells: newCells,
           isRevealed: !result.success,
-          selectedCellIndex: cellIndex,
+          selectedCellIndex: safeIndex,
         };
       });
 
@@ -102,7 +104,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         status: GameStatus.Idle,
         session: null,
         rows: createInitialRows(state.cellCount),
-        currentStep: 0,
+        currentStep: -1, // Возвращаемся к стартовой позиции
         currentMultiplier: 1,
         potentialWin: 0,
         lastResult: null,

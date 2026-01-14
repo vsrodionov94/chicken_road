@@ -378,10 +378,15 @@
 
   .balance {
     padding: 5px 8px;
+    min-width: 100px;
   }
 
   .balanceValue {
     font-size: 0.9rem;
+  }
+
+  .section {
+    min-width: 120px;
   }
 
   .startButton,
@@ -389,5 +394,112 @@
   .resetButton {
     padding: 8px;
     font-size: 0.8rem;
+    min-width: 100px;
+  }
+
+  .gameInfo {
+    min-width: 160px;
+  }
+
+  .multiplierDisplay,
+  .potentialWin {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 390px) {
+  .panel {
+    padding: 6px;
+    gap: 5px;
+  }
+
+  .balance {
+    padding: 4px 6px;
+    min-width: 90px;
+  }
+
+  .balanceLabel {
+    font-size: 0.65rem;
+  }
+
+  .balanceValue {
+    font-size: 0.8rem;
+  }
+
+  .section {
+    min-width: 100px;
+    gap: 3px;
+  }
+
+  .label {
+    font-size: 0.6rem;
+  }
+
+  .input {
+    padding: 5px 24px 5px 8px;
+    font-size: 0.8rem;
+  }
+
+  .currency {
+    font-size: 0.75rem;
+    right: 8px;
+  }
+
+  .quickBets button {
+    padding: 3px;
+    font-size: 0.65rem;
+  }
+
+  .difficultyBtn {
+    padding: 4px 2px;
+  }
+
+  .difficultyCount {
+    font-size: 0.8rem;
+  }
+
+  .difficultyLabel {
+    font-size: 0.55rem;
+  }
+
+  .difficultyInfo {
+    font-size: 0.6rem;
+  }
+
+  .startButton,
+  .cashoutButton,
+  .resetButton {
+    padding: 6px;
+    font-size: 0.75rem;
+    min-width: 80px;
+  }
+
+  .gameInfo {
+    min-width: 140px;
+    gap: 4px;
+  }
+
+  .multiplierDisplay,
+  .potentialWin {
+    padding: 4px 6px;
+    min-width: 80px;
+  }
+
+  .multiplierLabel,
+  .potentialLabel {
+    font-size: 0.6rem;
+  }
+
+  .multiplierValue,
+  .potentialValue {
+    font-size: 0.85rem;
+  }
+
+  .nextMultiplier {
+    font-size: 0.6rem;
+  }
+
+  .stepIndicator {
+    font-size: 0.6rem;
   }
 }

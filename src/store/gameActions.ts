@@ -22,9 +22,9 @@ export const startGame = (session: GameSession): GameAction => ({
   payload: session,
 });
 
-export const makeStep = (rowIndex: number, cellIndex: number, result: StepResult): GameAction => ({
+export const makeStep = (result: StepResult): GameAction => ({
   type: ActionType.MakeStep,
-  payload: { rowIndex, cellIndex, result },
+  payload: { result },
 });
 
 export const cashoutAction = (result: CashoutResult): GameAction => ({
@@ -32,9 +32,8 @@ export const cashoutAction = (result: CashoutResult): GameAction => ({
   payload: result,
 });
 
-export const gameOver = (trapIndex: number): GameAction => ({
+export const gameOver = (): GameAction => ({
   type: ActionType.GameOver,
-  payload: { trapIndex },
 });
 
 export const resetGame = (): GameAction => ({

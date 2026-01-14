@@ -9,7 +9,7 @@ export const initialState: GameState = {
   balance: INITIAL_BALANCE,
   betAmount: DEFAULT_BET_AMOUNT,
   cellCount: DEFAULT_CELL_COUNT,
-  currentStep: 0,
+  currentStep: -1, // -1 означает стартовую позицию (коэффициент 1.0x)
   currentMultiplier: 1,
   potentialWin: 0,
   lastResult: null,

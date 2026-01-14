@@ -6,6 +6,7 @@ export default {
     difficulty: 'Сложность',
     startGame: 'Начать игру',
     newGame: 'Новая игра',
+    continue: 'Продолжить',
     cashout: 'Забрать',
     currentMultiplier: 'Текущий коэффициент',
     nextMultiplier: 'Следующий',

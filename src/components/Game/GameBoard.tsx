@@ -1,30 +1,85 @@
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGame } from '../../context/GameContext';
-import { GameStatus } from '../../types/game';
+import { GameStatus, CellStatus, type Row } from '../../types/game';
 import { GameRow } from './GameRow';
 import styles from './GameBoard.module.css';
 
 export function GameBoard() {
   const { t } = useTranslation();
-  const { state, selectCell } = useGame();
+  const { state, continueGame } = useGame();
   const { rows, currentStep, status, cellCount } = state;
+  const roadRef = useRef<HTMLDivElement>(null);
+  const activeRowRef = useRef<HTMLDivElement>(null);
 
-  // Показываем ряды снизу вверх (первый ряд внизу)
-  const reversedRows = [...rows].reverse();
+  // Автоскролл к активному ряду
+  useEffect(() => {
+    if (status === GameStatus.Playing && activeRowRef.current && roadRef.current) {
+      const road = roadRef.current;
+      const activeRow = activeRowRef.current;
+      const rowLeft = activeRow.offsetLeft;
+      const rowWidth = activeRow.offsetWidth;
+      const roadWidth = road.offsetWidth;
+
+      // Центрируем активный ряд
+      const scrollTo = rowLeft - roadWidth / 2 + rowWidth / 2;
+      road.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    }
+  }, [currentStep, status]);
+
+  // Создаем стартовый ряд с коэффициентом 1.0x
+  const startRow: Row = {
+    index: -1,
+    cells: Array.from({ length: cellCount }, (_, i) => ({
+      index: i,
+      status: i === 0 ? CellStatus.Safe : CellStatus.Hidden, // Первая ячейка Safe (выбрана)
+      isTrap: false,
+    })),
+    isRevealed: false,
+    selectedCellIndex: 0,
+  };
 
   return (
     <div className={styles.board}>
-      <div className={styles.road}>
-        {reversedRows.map((row) => (
-          <GameRow
-            key={row.index}
-            row={row}
-            cellCount={cellCount}
-            isActive={status === GameStatus.Playing && row.index === currentStep}
-            isPassed={row.index < currentStep}
-            onCellClick={(cellIndex) => selectCell(row.index, cellIndex)}
-          />
-        ))}
+      <div className={styles.road} ref={roadRef}>
+        {/* Стартовый шаг с коэффициентом 1.0x */}
+        {(() => {
+          const isActive = status === GameStatus.Playing && currentStep === -1;
+          const isPassed = status === GameStatus.Playing && currentStep >= -1; // Стартовая позиция всегда пройдена во время игры
+          return (
+            <div key={-1} ref={isActive ? activeRowRef : undefined}>
+              <GameRow
+                row={startRow}
+                cellCount={cellCount}
+                isActive={false}
+                isPassed={isPassed}
+                isNext={false}
+                onRowClick={undefined}
+                onCellClick={() => {}}
+              />
+            </div>
+          );
+        })()}
+
+        {/* Остальные шаги */}
+        {rows.map((row) => {
+          // Следующий шаг - это активный шаг (желтый, кликабельный)
+          const isActive = status === GameStatus.Playing && row.index === currentStep + 1;
+          const isPassed = status === GameStatus.Playing && row.index <= currentStep;
+          return (
+            <div key={row.index} ref={isActive ? activeRowRef : undefined}>
+              <GameRow
+                row={row}
+                cellCount={cellCount}
+                isActive={isActive}
+                isPassed={isPassed}
+                isNext={false}
+                onRowClick={isActive ? continueGame : undefined}
+                onCellClick={() => {}}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {status === GameStatus.Idle && (

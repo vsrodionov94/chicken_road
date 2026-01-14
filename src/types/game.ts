@@ -49,7 +49,8 @@ export interface GameSession {
   clientSeed: string;
   nonce: number;
   cellCount: number;
-  trapPositions: number[]; // Позиции ловушек для каждого ряда (скрыто до конца игры)
+  safePath: number[]; // Индексы безопасных ячеек для каждого ряда (предопределенный путь)
+  maxStep: number; // Максимальное количество шагов до проигрыша
   bet: number;
   currentStep: number;
   currentMultiplier: number;
@@ -59,7 +60,7 @@ export interface GameSession {
 
 export interface StepResult {
   success: boolean;
-  trapIndex: number;
+  safeIndex: number; // Индекс безопасной ячейки на этом шаге
   newMultiplier: number;
   potentialWin: number;
 }
@@ -109,10 +110,10 @@ export type GameAction =
   | { type: ActionType.StartGame; payload: GameSession }
   | {
       type: ActionType.MakeStep;
-      payload: { rowIndex: number; cellIndex: number; result: StepResult };
+      payload: { result: StepResult };
     }
   | { type: ActionType.Cashout; payload: CashoutResult }
-  | { type: ActionType.GameOver; payload: { trapIndex: number } }
+  | { type: ActionType.GameOver }
   | { type: ActionType.ResetGame }
   | { type: ActionType.UpdateBalance; payload: number }
   | { type: ActionType.AddHistoryEntry; payload: GameHistoryEntry };

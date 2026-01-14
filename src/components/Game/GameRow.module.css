@@ -1,31 +1,63 @@
 .row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 4px 8px;
-  border-radius: 6px;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
   transition: all 0.3s ease;
   opacity: 0.4;
+  min-width: 180px;
+  flex-shrink: 0;
 }
 
 .row.active {
   opacity: 1;
-  background: rgba(255, 193, 7, 0.1);
+  background: rgba(255, 193, 7, 0.15);
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+  animation: pulseYellow 2s infinite;
+}
+
+.row.active:hover {
+  transform: scale(1.05);
+  background: rgba(255, 193, 7, 0.25);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+}
+
+@keyframes pulseYellow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+  }
 }
 
 .row.passed {
-  opacity: 0.7;
+  opacity: 0.8;
+  background: rgba(46, 204, 113, 0.1);
 }
 
 .multiplier {
-  min-width: 55px;
-  text-align: right;
+  text-align: center;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  min-width: 100px;
 }
 
 .multiplierValue {
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--accent-yellow);
+}
+
+.row.active .multiplier {
+  background: rgba(255, 193, 7, 0.2);
+}
+
+.row.passed .multiplier {
+  background: rgba(46, 204, 113, 0.2);
 }
 
 .row.passed .multiplierValue {
@@ -34,21 +66,22 @@
 
 .cells {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
+  gap: 4px;
   justify-content: center;
-  flex: 1;
+  align-items: center;
 }
 
 .stepNumber {
-  min-width: 22px;
-  height: 22px;
+  min-width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg-tertiary);
   border-radius: 50%;
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--text-secondary);
 }
 
@@ -64,12 +97,68 @@
 
 @media (max-width: 900px) {
   .row {
-    gap: 6px;
-    padding: 2px 6px;
+    min-width: 140px;
+    gap: 8px;
+    padding: 12px;
   }
 
   .multiplier {
-    min-width: 44px;
+    padding: 6px 12px;
+    min-width: 80px;
+  }
+
+  .multiplierValue {
+    font-size: 0.95rem;
+  }
+
+  .cells {
+    gap: 4px;
+  }
+
+  .stepNumber {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .row {
+    min-width: 100px;
+    gap: 6px;
+    padding: 10px;
+  }
+
+  .multiplier {
+    padding: 5px 10px;
+    min-width: 60px;
+  }
+
+  .multiplierValue {
+    font-size: 0.85rem;
+  }
+
+  .cells {
+    gap: 3px;
+  }
+
+  .stepNumber {
+    min-width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .row {
+    min-width: 80px;
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .multiplier {
+    padding: 4px 8px;
+    min-width: 50px;
   }
 
   .multiplierValue {
@@ -77,37 +166,12 @@
   }
 
   .cells {
-    gap: 6px;
+    gap: 2px;
   }
 
   .stepNumber {
-    min-width: 20px;
-    height: 20px;
+    min-width: 22px;
+    height: 22px;
     font-size: 0.65rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .row {
-    gap: 5px;
-    padding: 1px 4px;
-  }
-
-  .multiplier {
-    min-width: 38px;
-  }
-
-  .multiplierValue {
-    font-size: 0.65rem;
-  }
-
-  .cells {
-    gap: 5px;
-  }
-
-  .stepNumber {
-    min-width: 18px;
-    height: 18px;
-    font-size: 0.6rem;
   }
 }

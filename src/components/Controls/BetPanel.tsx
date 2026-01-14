@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useGame } from '../../context/GameContext';
 import { GameStatus } from '../../types/game';
-import { getDifficultyKey, getWinProbability, getMaxMultiplier } from '../../utils/coefficients';
 import styles from './BetPanel.module.css';
 
 export function BetPanel() {
@@ -12,12 +11,10 @@ export function BetPanel() {
     cashoutGame,
     resetGame,
     setBetAmount,
-    setCellCount,
     getNextMultiplier,
   } = useGame();
 
-  const { status, balance, betAmount, cellCount, currentMultiplier, potentialWin, currentStep } =
-    state;
+  const { status, balance, betAmount, currentMultiplier, potentialWin, currentStep } = state;
 
   const isPlaying = status === GameStatus.Playing;
   const isGameOver = status === GameStatus.Won || status === GameStatus.Lost;
@@ -64,28 +61,6 @@ export function BetPanel() {
             </div>
           </div>
 
-          <div className={styles.section}>
-            <label className={styles.label}>{t('game.difficulty')}</label>
-            <div className={styles.difficultySelector}>
-              {[2, 3, 4, 5].map((count) => (
-                <button
-                  key={count}
-                  className={`${styles.difficultyBtn} ${cellCount === count ? styles.active : ''}`}
-                  onClick={() => setCellCount(count)}
-                >
-                  <span className={styles.difficultyCount}>{count}</span>
-                  <span className={styles.difficultyLabel}>
-                    {Math.round(getWinProbability(count) * 100)}%
-                  </span>
-                </button>
-              ))}
-            </div>
-            <div className={styles.difficultyInfo}>
-              <span>{t(getDifficultyKey(cellCount))}</span>
-              <span>Max: {getMaxMultiplier(cellCount).toFixed(2)}x</span>
-            </div>
-          </div>
-
           <button
             className={styles.startButton}
             onClick={startNewGame}
@@ -108,7 +83,7 @@ export function BetPanel() {
             <span className={styles.potentialValue}>{potentialWin.toFixed(2)} $</span>
           </div>
 
-          {currentStep > 0 && (
+          {currentStep < 9 && (
             <div className={styles.nextMultiplier}>
               <span>
                 {t('game.nextMultiplier')}: {getNextMultiplier().toFixed(2)}x
@@ -119,13 +94,13 @@ export function BetPanel() {
           <button
             className={styles.cashoutButton}
             onClick={cashoutGame}
-            disabled={currentStep === 0}
+            disabled={currentStep === -1}
           >
             {t('game.cashout')} {potentialWin.toFixed(2)} $
           </button>
 
           <div className={styles.stepIndicator}>
-            {t('game.step')} {currentStep + 1} {t('game.of')} 10
+            {t('game.step')} {currentStep + 1 >= 0 ? currentStep + 2 : 1} {t('game.of')} 11
           </div>
         </div>
       )}

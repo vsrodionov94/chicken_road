@@ -6,6 +6,7 @@ export default {
     difficulty: 'Difficulty',
     startGame: 'Start Game',
     newGame: 'New Game',
+    continue: 'Continue',
     cashout: 'Cashout',
     currentMultiplier: 'Current Multiplier',
     nextMultiplier: 'Next',

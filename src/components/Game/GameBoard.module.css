@@ -12,10 +12,35 @@
 
 .road {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
   flex: 1;
-  justify-content: space-around;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-yellow) var(--bg-tertiary);
+  padding-bottom: 8px;
+}
+
+.road::-webkit-scrollbar {
+  height: 6px;
+}
+
+.road::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+}
+
+.road::-webkit-scrollbar-thumb {
+  background: var(--accent-yellow);
+  border-radius: 3px;
+}
+
+.road::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-green);
 }
 
 .overlay {
@@ -89,7 +114,8 @@
   }
 
   .road {
-    gap: 1px;
+    gap: 20px;
+    padding-bottom: 6px;
   }
 
   .overlay {
@@ -113,6 +139,11 @@
     border-radius: 6px;
   }
 
+  .road {
+    gap: 20px;
+    padding-bottom: 4px;
+  }
+
   .overlay p {
     font-size: 1rem;
     margin-bottom: 6px;
@@ -121,5 +152,31 @@
   .winAmount,
   .loseAmount {
     font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .board {
+    padding: 4px;
+    border-radius: 6px;
+  }
+
+  .road {
+    gap: 20px;
+    padding-bottom: 3px;
+  }
+
+  .road::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .overlay p {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .winAmount,
+  .loseAmount {
+    font-size: 1.1rem;
   }
 }

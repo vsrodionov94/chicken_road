@@ -1,5 +1,13 @@
 import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react';
-import type { GameState, GameAction, Row, Cell, GameHistoryEntry } from '../types/game';
+import {
+  GameStatus,
+  CellStatus,
+  type GameState,
+  type GameAction,
+  type Row,
+  type Cell,
+  type GameHistoryEntry,
+} from '../types/game';
 import { startGame, makeStep, cashout } from '../services/mockApi';
 import { calculateMultiplier } from '../utils/coefficients';
 
@@ -11,7 +19,7 @@ function createInitialRows(cellCount: number): Row[] {
     index: rowIndex,
     cells: Array.from({ length: cellCount }, (_, cellIndex) => ({
       index: cellIndex,
-      status: 'hidden' as const,
+      status: CellStatus.Hidden,
       isTrap: false,
     })),
     isRevealed: false,
@@ -20,7 +28,7 @@ function createInitialRows(cellCount: number): Row[] {
 }
 
 const initialState: GameState = {
-  status: 'idle',
+  status: GameStatus.Idle,
   session: null,
   rows: createInitialRows(3),
   balance: INITIAL_BALANCE,
@@ -48,7 +56,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'START_GAME':
       return {
         ...state,
-        status: 'playing',
+        status: GameStatus.Playing,
         session: action.payload,
         rows: createInitialRows(action.payload.cellCount),
         currentStep: 0,
@@ -67,15 +75,15 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           if (cIdx === cellIndex) {
             return {
               ...cell,
-              status: result.success ? 'safe' : 'trap',
+              status: result.success ? CellStatus.Safe : CellStatus.Trap,
               isTrap: !result.success,
             };
           }
           if (!result.success && cIdx === result.trapIndex) {
-            return { ...cell, status: 'trap', isTrap: true };
+            return { ...cell, status: CellStatus.Trap, isTrap: true };
           }
           if (!result.success) {
-            return { ...cell, status: 'safe' };
+            return { ...cell, status: CellStatus.Safe };
           }
           return cell;
         });
@@ -92,7 +100,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         // Показать все ловушки при проигрыше
         return {
           ...state,
-          status: 'lost',
+          status: GameStatus.Lost,
           rows: newRows,
           lastResult: result,
         };
@@ -111,20 +119,20 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'CASHOUT':
       return {
         ...state,
-        status: 'won',
+        status: GameStatus.Won,
         balance: state.balance + action.payload.amount,
       };
 
     case 'GAME_OVER':
       return {
         ...state,
-        status: 'lost',
+        status: GameStatus.Lost,
       };
 
     case 'RESET_GAME':
       return {
         ...state,
-        status: 'idle',
+        status: GameStatus.Idle,
         session: null,
         rows: createInitialRows(state.cellCount),
         currentStep: 0,
@@ -177,33 +185,36 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [state.betAmount, state.cellCount, state.balance]);
 
-  const selectCell = useCallback(async (rowIndex: number, cellIndex: number) => {
-    if (!state.session || state.status !== 'playing') return;
-    if (rowIndex !== state.currentStep) return;
+  const selectCell = useCallback(
+    async (rowIndex: number, cellIndex: number) => {
+      if (!state.session || state.status !== GameStatus.Playing) return;
+      if (rowIndex !== state.currentStep) return;
 
-    try {
-      const result = await makeStep(state.session.id, cellIndex);
-      dispatch({ type: 'MAKE_STEP', payload: { rowIndex, cellIndex, result } });
+      try {
+        const result = await makeStep(state.session.id, cellIndex);
+        dispatch({ type: 'MAKE_STEP', payload: { rowIndex, cellIndex, result } });
 
-      if (!result.success) {
-        const entry: GameHistoryEntry = {
-          id: state.session.id,
-          bet: state.session.bet,
-          result: 'lost',
-          multiplier: state.currentMultiplier,
-          payout: 0,
-          steps: state.currentStep,
-          timestamp: Date.now(),
-        };
-        dispatch({ type: 'ADD_HISTORY_ENTRY', payload: entry });
+        if (!result.success) {
+          const entry: GameHistoryEntry = {
+            id: state.session.id,
+            bet: state.session.bet,
+            result: 'lost',
+            multiplier: state.currentMultiplier,
+            payout: 0,
+            steps: state.currentStep,
+            timestamp: Date.now(),
+          };
+          dispatch({ type: 'ADD_HISTORY_ENTRY', payload: entry });
+        }
+      } catch (error) {
+        console.error('Failed to make step:', error);
       }
-    } catch (error) {
-      console.error('Failed to make step:', error);
-    }
-  }, [state.session, state.status, state.currentStep, state.currentMultiplier]);
+    },
+    [state.session, state.status, state.currentStep, state.currentMultiplier]
+  );
 
   const cashoutGame = useCallback(async () => {
-    if (!state.session || state.status !== 'playing') return;
+    if (!state.session || state.status !== GameStatus.Playing) return;
     if (state.currentStep === 0) return;
 
     try {
@@ -229,15 +240,21 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'RESET_GAME' });
   }, []);
 
-  const setBetAmount = useCallback((amount: number) => {
-    if (state.status === 'playing') return;
-    dispatch({ type: 'SET_BET_AMOUNT', payload: Math.max(1, amount) });
-  }, [state.status]);
+  const setBetAmount = useCallback(
+    (amount: number) => {
+      if (state.status === GameStatus.Playing) return;
+      dispatch({ type: 'SET_BET_AMOUNT', payload: Math.max(1, amount) });
+    },
+    [state.status]
+  );
 
-  const setCellCount = useCallback((count: number) => {
-    if (state.status === 'playing') return;
-    dispatch({ type: 'SET_CELL_COUNT', payload: Math.min(5, Math.max(2, count)) });
-  }, [state.status]);
+  const setCellCount = useCallback(
+    (count: number) => {
+      if (state.status === GameStatus.Playing) return;
+      dispatch({ type: 'SET_CELL_COUNT', payload: Math.min(5, Math.max(2, count)) });
+    },
+    [state.status]
+  );
 
   const getNextMultiplier = useCallback(() => {
     return calculateMultiplier(state.cellCount, state.currentStep + 1);
@@ -254,11 +271,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     getNextMultiplier,
   };
 
-  return (
-    <GameContext.Provider value={value}>
-      {children}
-    </GameContext.Provider>
-  );
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
 export function useGame() {

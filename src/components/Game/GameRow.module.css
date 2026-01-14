@@ -1,9 +1,9 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px 16px;
-  border-radius: 8px;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
   transition: all 0.3s ease;
   opacity: 0.4;
 }
@@ -18,12 +18,12 @@
 }
 
 .multiplier {
-  min-width: 70px;
+  min-width: 55px;
   text-align: right;
 }
 
 .multiplierValue {
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--accent-yellow);
 }
@@ -34,20 +34,20 @@
 
 .cells {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   justify-content: center;
   flex: 1;
 }
 
 .stepNumber {
-  min-width: 30px;
-  height: 30px;
+  min-width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg-tertiary);
   border-radius: 50%;
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   font-weight: 500;
   color: var(--text-secondary);
 }
@@ -62,21 +62,52 @@
   color: var(--bg-primary);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .row {
-    gap: 8px;
-    padding: 6px 8px;
+    gap: 6px;
+    padding: 2px 6px;
   }
 
   .multiplier {
-    min-width: 50px;
+    min-width: 44px;
   }
 
   .multiplierValue {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
 
   .cells {
-    gap: 8px;
+    gap: 6px;
+  }
+
+  .stepNumber {
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .row {
+    gap: 5px;
+    padding: 1px 4px;
+  }
+
+  .multiplier {
+    min-width: 38px;
+  }
+
+  .multiplierValue {
+    font-size: 0.65rem;
+  }
+
+  .cells {
+    gap: 5px;
+  }
+
+  .stepNumber {
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.6rem;
   }
 }

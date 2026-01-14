@@ -1,15 +1,30 @@
-import type { GameSession, StepResult, CashoutResult, VerificationData } from '../types/game';
-import { generateRandomString, sha256, generateTrapPositions, generateSessionId, verifyGame } from '../utils/crypto';
+import {
+  GameStatus,
+  type GameSession,
+  type StepResult,
+  type CashoutResult,
+  type VerificationData,
+} from '../types/game';
+import {
+  generateRandomString,
+  sha256,
+  generateTrapPositions,
+  generateSessionId,
+  verifyGame,
+} from '../utils/crypto';
 import { calculateMultiplier, calculatePotentialWin } from '../utils/coefficients';
 
 // Хранилище активных сессий (в реальном приложении это будет на сервере)
-const activeSessions = new Map<string, {
-  session: GameSession;
-  serverSeed: string;
-}>();
+const activeSessions = new Map<
+  string,
+  {
+    session: GameSession;
+    serverSeed: string;
+  }
+>();
 
 // Имитация задержки сети
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Начать новую игру
@@ -44,7 +59,7 @@ export async function startGame(
     bet,
     currentStep: 0,
     currentMultiplier: 1,
-    status: 'playing',
+    status: GameStatus.Playing,
     createdAt: Date.now(),
   };
 
@@ -60,10 +75,7 @@ export async function startGame(
 /**
  * Сделать шаг (выбрать ячейку)
  */
-export async function makeStep(
-  sessionId: string,
-  cellIndex: number
-): Promise<StepResult> {
+export async function makeStep(sessionId: string, cellIndex: number): Promise<StepResult> {
   await delay(100);
 
   const sessionData = activeSessions.get(sessionId);
@@ -73,7 +85,7 @@ export async function makeStep(
 
   const { session } = sessionData;
 
-  if (session.status !== 'playing') {
+  if (session.status !== GameStatus.Playing) {
     throw new Error('Game is not in playing state');
   }
 
@@ -85,7 +97,7 @@ export async function makeStep(
     session.currentStep += 1;
     session.currentMultiplier = calculateMultiplier(session.cellCount, session.currentStep);
   } else {
-    session.status = 'lost';
+    session.status = GameStatus.Lost;
   }
 
   return {
@@ -109,7 +121,7 @@ export async function cashout(sessionId: string): Promise<CashoutResult> {
 
   const { session } = sessionData;
 
-  if (session.status !== 'playing') {
+  if (session.status !== GameStatus.Playing) {
     throw new Error('Game is not in playing state');
   }
 
@@ -117,7 +129,7 @@ export async function cashout(sessionId: string): Promise<CashoutResult> {
     throw new Error('Cannot cashout without making any steps');
   }
 
-  session.status = 'won';
+  session.status = GameStatus.Won;
   const amount = calculatePotentialWin(session.bet, session.currentMultiplier);
 
   return {
@@ -140,7 +152,7 @@ export async function getVerificationData(sessionId: string): Promise<Verificati
 
   const { session, serverSeed } = sessionData;
 
-  if (session.status === 'playing') {
+  if (session.status === GameStatus.Playing) {
     throw new Error('Cannot verify while game is in progress');
   }
 
@@ -172,7 +184,8 @@ export function getSession(sessionId: string): GameSession | null {
 
   return {
     ...sessionData.session,
-    trapPositions: sessionData.session.status === 'playing' ? [] : sessionData.session.trapPositions,
+    trapPositions:
+      sessionData.session.status === GameStatus.Playing ? [] : sessionData.session.trapPositions,
   };
 }
 

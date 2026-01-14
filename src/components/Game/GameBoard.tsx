@@ -1,4 +1,5 @@
 import { useGame } from '../../context/GameContext';
+import { GameStatus } from '../../types/game';
 import { GameRow } from './GameRow';
 import styles from './GameBoard.module.css';
 
@@ -17,34 +18,30 @@ export function GameBoard() {
             key={row.index}
             row={row}
             cellCount={cellCount}
-            isActive={status === 'playing' && row.index === currentStep}
+            isActive={status === GameStatus.Playing && row.index === currentStep}
             isPassed={row.index < currentStep}
             onCellClick={(cellIndex) => selectCell(row.index, cellIndex)}
           />
         ))}
       </div>
 
-      {status === 'idle' && (
+      {status === GameStatus.Idle && (
         <div className={styles.overlay}>
           <p>Сделайте ставку и начните игру</p>
         </div>
       )}
 
-      {status === 'won' && (
+      {status === GameStatus.Won && (
         <div className={`${styles.overlay} ${styles.won}`}>
           <p>Вы выиграли!</p>
-          <span className={styles.winAmount}>
-            +{state.potentialWin.toFixed(2)} $
-          </span>
+          <span className={styles.winAmount}>+{state.potentialWin.toFixed(2)} $</span>
         </div>
       )}
 
-      {status === 'lost' && (
+      {status === GameStatus.Lost && (
         <div className={`${styles.overlay} ${styles.lost}`}>
           <p>Вы проиграли!</p>
-          <span className={styles.loseAmount}>
-            -{state.session?.bet.toFixed(2)} $
-          </span>
+          <span className={styles.loseAmount}>-{state.session?.bet.toFixed(2)} $</span>
         </div>
       )}
     </div>

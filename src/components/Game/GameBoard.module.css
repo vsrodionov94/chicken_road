@@ -1,18 +1,21 @@
 .board {
   position: relative;
   background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 20px;
-  min-height: 500px;
+  border-radius: 12px;
+  padding: 12px;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .road {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
+  justify-content: space-around;
 }
 
 .overlay {
@@ -57,7 +60,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -66,7 +70,8 @@
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   25% {
@@ -77,18 +82,44 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .board {
-    padding: 12px;
-    min-height: 400px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .road {
+    gap: 1px;
+  }
+
+  .overlay {
+    border-radius: 8px;
   }
 
   .overlay p {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
   }
 
   .winAmount,
   .loseAmount {
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .board {
+    padding: 6px;
+    border-radius: 6px;
+  }
+
+  .overlay p {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .winAmount,
+  .loseAmount {
+    font-size: 1.25rem;
   }
 }

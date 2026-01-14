@@ -1,6 +1,17 @@
-export type GameStatus = 'idle' | 'betting' | 'playing' | 'won' | 'lost';
+export enum GameStatus {
+  Idle = 'idle',
+  Betting = 'betting',
+  Playing = 'playing',
+  Won = 'won',
+  Lost = 'lost',
+}
 
-export type CellStatus = 'hidden' | 'safe' | 'trap' | 'selected';
+export enum CellStatus {
+  Hidden = 'hidden',
+  Safe = 'safe',
+  Trap = 'trap',
+  Selected = 'selected',
+}
 
 export interface Cell {
   index: number;
@@ -21,7 +32,7 @@ export interface GameSession {
   clientSeed: string;
   nonce: number;
   cellCount: number;
-  trapPositions: number[];  // Позиции ловушек для каждого ряда (скрыто до конца игры)
+  trapPositions: number[]; // Позиции ловушек для каждого ряда (скрыто до конца игры)
   bet: number;
   currentStep: number;
   currentMultiplier: number;

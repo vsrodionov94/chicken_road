@@ -15,7 +15,9 @@ export function GameRow({ row, cellCount, isActive, isPassed, onCellClick }: Gam
   const multiplier = calculateMultiplier(cellCount, row.index + 1);
 
   return (
-    <div className={`${styles.row} ${isActive ? styles.active : ''} ${isPassed ? styles.passed : ''}`}>
+    <div
+      className={`${styles.row} ${isActive ? styles.active : ''} ${isPassed ? styles.passed : ''}`}
+    >
       <div className={styles.multiplier}>
         <span className={styles.multiplierValue}>{multiplier.toFixed(2)}x</span>
       </div>

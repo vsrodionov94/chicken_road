@@ -78,16 +78,8 @@
   color: var(--accent-red);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .history {
-    padding: 16px;
-  }
-
-  .list {
-    max-height: 200px;
-  }
-
-  .entry {
-    padding: 10px;
+    display: none;
   }
 }

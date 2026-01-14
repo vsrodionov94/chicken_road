@@ -1,82 +1,125 @@
 .app {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 12px 16px;
+  overflow: hidden;
 }
 
 .header {
-  padding: 20px 0;
+  padding: 8px 0;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .logoIcon {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
 }
 
 .main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 24px;
-  padding: 20px 0;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .gameArea {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+  overflow-y: auto;
 }
 
 .footer {
-  padding: 20px 0;
+  padding: 8px 0;
   text-align: center;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  flex-shrink: 0;
 }
 
 @media (max-width: 900px) {
-  .main {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    order: -1;
-  }
-}
-
-@media (max-width: 600px) {
   .app {
-    padding: 12px;
+    padding: 8px;
+  }
+
+  .header {
+    padding: 4px 0;
   }
 
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    gap: 6px;
   }
 
   .logoIcon {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .main {
-    gap: 16px;
-    padding: 12px 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 8px;
+  }
+
+  .gameArea {
+    order: 1;
+  }
+
+  .sidebar {
+    order: 2;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .footer {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 6px;
+  }
+
+  .header {
+    padding: 2px 0;
+  }
+
+  .logo {
+    font-size: 1rem;
+  }
+
+  .logoIcon {
+    font-size: 1.25rem;
+  }
+
+  .main {
+    gap: 6px;
+  }
+
+  .sidebar {
+    max-height: 160px;
   }
 }

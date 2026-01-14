@@ -1,4 +1,4 @@
-import type { CellStatus } from '../../types/game';
+import { CellStatus } from '../../types/game';
 import styles from './GameCell.module.css';
 
 interface GameCellProps {
@@ -11,9 +11,9 @@ interface GameCellProps {
 export function GameCell({ status, isActive, onClick }: GameCellProps) {
   const getCellContent = () => {
     switch (status) {
-      case 'safe':
+      case CellStatus.Safe:
         return '🐔';
-      case 'trap':
+      case CellStatus.Trap:
         return '🚗';
       default:
         return '?';
@@ -24,7 +24,7 @@ export function GameCell({ status, isActive, onClick }: GameCellProps) {
     <button
       className={`${styles.cell} ${styles[status]} ${isActive ? styles.active : ''}`}
       onClick={onClick}
-      disabled={!isActive || status !== 'hidden'}
+      disabled={!isActive || status !== CellStatus.Hidden}
     >
       <span className={styles.content}>{getCellContent()}</span>
     </button>

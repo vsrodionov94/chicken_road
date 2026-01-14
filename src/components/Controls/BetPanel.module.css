@@ -1,28 +1,28 @@
 .panel {
   background: var(--bg-secondary);
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 
 .balance {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 10px 12px;
   background: var(--bg-tertiary);
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .balanceLabel {
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .balanceValue {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--accent-green);
 }
@@ -30,11 +30,11 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -47,12 +47,12 @@
 
 .input {
   width: 100%;
-  padding: 12px 40px 12px 16px;
+  padding: 8px 32px 8px 12px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--text-primary);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
   outline: none;
   transition: border-color 0.2s;
@@ -70,24 +70,25 @@
 
 .currency {
   position: absolute;
-  right: 16px;
+  right: 12px;
   color: var(--text-secondary);
   font-weight: 500;
+  font-size: 0.875rem;
 }
 
 .quickBets {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .quickBets button {
   flex: 1;
-  padding: 8px;
+  padding: 6px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   transition: all 0.2s;
 }
@@ -100,19 +101,19 @@
 
 .difficultySelector {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .difficultyBtn {
   flex: 1;
-  padding: 12px 8px;
+  padding: 8px 4px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   transition: all 0.2s;
 }
 
@@ -126,32 +127,34 @@
 }
 
 .difficultyCount {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .difficultyLabel {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: var(--text-secondary);
 }
 
 .difficultyInfo {
   display: flex;
   justify-content: space-between;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
 .startButton {
-  padding: 16px;
+  padding: 12px;
   background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   color: white;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .startButton:hover:not(:disabled) {
@@ -167,7 +170,7 @@
 .gameInfo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .multiplierDisplay,
@@ -175,25 +178,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 8px 12px;
   background: var(--bg-tertiary);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .multiplierLabel,
 .potentialLabel {
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .multiplierValue {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--accent-yellow);
 }
 
 .potentialValue {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--accent-green);
 }
@@ -201,18 +204,20 @@
 .nextMultiplier {
   text-align: center;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .cashoutButton {
-  padding: 16px;
+  padding: 12px;
   background: linear-gradient(135deg, var(--accent-yellow) 0%, #e6a800 100%);
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   color: var(--bg-primary);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .cashoutButton:hover:not(:disabled) {
@@ -228,16 +233,16 @@
 .stepIndicator {
   text-align: center;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .resetButton {
-  padding: 16px;
+  padding: 12px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 8px;
   color: var(--text-primary);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s;
 }
@@ -247,25 +252,142 @@
   background: rgba(52, 152, 219, 0.1);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .panel {
-    padding: 16px;
-    gap: 16px;
+    padding: 10px;
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .balance {
-    padding: 12px;
+    padding: 6px 10px;
+    flex: 1;
+    min-width: 120px;
   }
 
   .balanceValue {
-    font-size: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .section {
+    flex: 1;
+    min-width: 140px;
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 0.65rem;
+  }
+
+  .input {
+    padding: 6px 28px 6px 10px;
+    font-size: 0.875rem;
+  }
+
+  .quickBets {
+    gap: 4px;
+  }
+
+  .quickBets button {
+    padding: 4px;
+    font-size: 0.7rem;
+  }
+
+  .difficultySelector {
+    gap: 4px;
   }
 
   .difficultyBtn {
-    padding: 8px 4px;
+    padding: 6px 2px;
   }
 
   .difficultyCount {
+    font-size: 0.875rem;
+  }
+
+  .difficultyLabel {
+    font-size: 0.6rem;
+  }
+
+  .difficultyInfo {
+    font-size: 0.65rem;
+  }
+
+  .startButton {
+    padding: 10px;
+    font-size: 0.875rem;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .gameInfo {
+    flex: 1;
+    min-width: 200px;
+    gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .multiplierDisplay,
+  .potentialWin {
+    padding: 6px 10px;
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .multiplierLabel,
+  .potentialLabel {
+    font-size: 0.65rem;
+  }
+
+  .multiplierValue,
+  .potentialValue {
     font-size: 1rem;
+  }
+
+  .nextMultiplier {
+    font-size: 0.65rem;
+    width: 100%;
+  }
+
+  .cashoutButton {
+    padding: 10px;
+    font-size: 0.875rem;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .stepIndicator {
+    font-size: 0.65rem;
+  }
+
+  .resetButton {
+    padding: 10px;
+    font-size: 0.875rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .balance {
+    padding: 5px 8px;
+  }
+
+  .balanceValue {
+    font-size: 0.9rem;
+  }
+
+  .startButton,
+  .cashoutButton,
+  .resetButton {
+    padding: 8px;
+    font-size: 0.8rem;
   }
 }

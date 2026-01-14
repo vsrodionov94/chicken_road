@@ -14,10 +14,7 @@ export function GameHistory() {
       <h3 className={styles.title}>История игр</h3>
       <div className={styles.list}>
         {history.map((entry) => (
-          <div
-            key={entry.id}
-            className={`${styles.entry} ${styles[entry.result]}`}
-          >
+          <div key={entry.id} className={`${styles.entry} ${styles[entry.result]}`}>
             <div className={styles.info}>
               <span className={styles.bet}>{entry.bet.toFixed(2)} $</span>
               <span className={styles.steps}>{entry.steps} шагов</span>

@@ -1,4 +1,5 @@
 import { useGame } from '../../context/GameContext';
+import { GameStatus } from '../../types/game';
 import { getDifficultyLabel, getWinProbability, getMaxMultiplier } from '../../utils/coefficients';
 import styles from './BetPanel.module.css';
 
@@ -13,10 +14,11 @@ export function BetPanel() {
     getNextMultiplier,
   } = useGame();
 
-  const { status, balance, betAmount, cellCount, currentMultiplier, potentialWin, currentStep } = state;
+  const { status, balance, betAmount, cellCount, currentMultiplier, potentialWin, currentStep } =
+    state;
 
-  const isPlaying = status === 'playing';
-  const isGameOver = status === 'won' || status === 'lost';
+  const isPlaying = status === GameStatus.Playing;
+  const isGameOver = status === GameStatus.Won || status === GameStatus.Lost;
 
   const handleBetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value) || 0;
@@ -118,9 +120,7 @@ export function BetPanel() {
             Забрать {potentialWin.toFixed(2)} $
           </button>
 
-          <div className={styles.stepIndicator}>
-            Шаг {currentStep + 1} из 10
-          </div>
+          <div className={styles.stepIndicator}>Шаг {currentStep + 1} из 10</div>
         </div>
       )}
 

@@ -1,159 +1,13 @@
 import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react';
-import {
-  GameStatus,
-  CellStatus,
-  type GameState,
-  type GameAction,
-  type Row,
-  type Cell,
-  type GameHistoryEntry,
-} from '../types/game';
-import { startGame, makeStep, cashout } from '../services/mockApi';
+import { useTranslation } from 'react-i18next';
+import { useToast } from './ToastContext';
+import { GameStatus, GameResult, type GameState, type GameHistoryEntry } from '../types/game';
+import { MIN_CELL_COUNT, MAX_CELL_COUNT } from '../constants/game';
+import { gameReducer } from '../store/gameReducer';
+import { initialState } from '../store/initialState';
+import * as actions from '../store/gameActions';
+import { startGame as apiStartGame, makeStep, cashout } from '../services/mockApi';
 import { calculateMultiplier } from '../utils/coefficients';
-
-const INITIAL_BALANCE = 1000;
-const ROW_COUNT = 10;
-
-function createInitialRows(cellCount: number): Row[] {
-  return Array.from({ length: ROW_COUNT }, (_, rowIndex) => ({
-    index: rowIndex,
-    cells: Array.from({ length: cellCount }, (_, cellIndex) => ({
-      index: cellIndex,
-      status: CellStatus.Hidden,
-      isTrap: false,
-    })),
-    isRevealed: false,
-    selectedCellIndex: null,
-  }));
-}
-
-const initialState: GameState = {
-  status: GameStatus.Idle,
-  session: null,
-  rows: createInitialRows(3),
-  balance: INITIAL_BALANCE,
-  betAmount: 10,
-  cellCount: 3,
-  currentStep: 0,
-  currentMultiplier: 1,
-  potentialWin: 0,
-  lastResult: null,
-  history: [],
-};
-
-function gameReducer(state: GameState, action: GameAction): GameState {
-  switch (action.type) {
-    case 'SET_BET_AMOUNT':
-      return { ...state, betAmount: action.payload };
-
-    case 'SET_CELL_COUNT':
-      return {
-        ...state,
-        cellCount: action.payload,
-        rows: createInitialRows(action.payload),
-      };
-
-    case 'START_GAME':
-      return {
-        ...state,
-        status: GameStatus.Playing,
-        session: action.payload,
-        rows: createInitialRows(action.payload.cellCount),
-        currentStep: 0,
-        currentMultiplier: 1,
-        potentialWin: action.payload.bet,
-        lastResult: null,
-        balance: state.balance - action.payload.bet,
-      };
-
-    case 'MAKE_STEP': {
-      const { rowIndex, cellIndex, result } = action.payload;
-      const newRows = state.rows.map((row, idx) => {
-        if (idx !== rowIndex) return row;
-
-        const newCells: Cell[] = row.cells.map((cell, cIdx) => {
-          if (cIdx === cellIndex) {
-            return {
-              ...cell,
-              status: result.success ? CellStatus.Safe : CellStatus.Trap,
-              isTrap: !result.success,
-            };
-          }
-          if (!result.success && cIdx === result.trapIndex) {
-            return { ...cell, status: CellStatus.Trap, isTrap: true };
-          }
-          if (!result.success) {
-            return { ...cell, status: CellStatus.Safe };
-          }
-          return cell;
-        });
-
-        return {
-          ...row,
-          cells: newCells,
-          isRevealed: !result.success,
-          selectedCellIndex: cellIndex,
-        };
-      });
-
-      if (!result.success) {
-        // Показать все ловушки при проигрыше
-        return {
-          ...state,
-          status: GameStatus.Lost,
-          rows: newRows,
-          lastResult: result,
-        };
-      }
-
-      return {
-        ...state,
-        rows: newRows,
-        currentStep: state.currentStep + 1,
-        currentMultiplier: result.newMultiplier,
-        potentialWin: result.potentialWin,
-        lastResult: result,
-      };
-    }
-
-    case 'CASHOUT':
-      return {
-        ...state,
-        status: GameStatus.Won,
-        balance: state.balance + action.payload.amount,
-      };
-
-    case 'GAME_OVER':
-      return {
-        ...state,
-        status: GameStatus.Lost,
-      };
-
-    case 'RESET_GAME':
-      return {
-        ...state,
-        status: GameStatus.Idle,
-        session: null,
-        rows: createInitialRows(state.cellCount),
-        currentStep: 0,
-        currentMultiplier: 1,
-        potentialWin: 0,
-        lastResult: null,
-      };
-
-    case 'UPDATE_BALANCE':
-      return { ...state, balance: action.payload };
-
-    case 'ADD_HISTORY_ENTRY':
-      return {
-        ...state,
-        history: [action.payload, ...state.history].slice(0, 20),
-      };
-
-    default:
-      return state;
-  }
-}
 
 interface GameContextValue {
   state: GameState;
@@ -169,21 +23,23 @@ interface GameContextValue {
 const GameContext = createContext<GameContextValue | null>(null);
 
 export function GameProvider({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+  const { showToast } = useToast();
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   const startNewGame = useCallback(async () => {
     if (state.betAmount > state.balance) {
-      alert('Недостаточно средств');
+      showToast(t('game.insufficientFunds'), 'error');
       return;
     }
 
     try {
-      const session = await startGame(state.betAmount, state.cellCount);
-      dispatch({ type: 'START_GAME', payload: session });
+      const session = await apiStartGame(state.betAmount, state.cellCount);
+      dispatch(actions.startGame(session));
     } catch (error) {
       console.error('Failed to start game:', error);
     }
-  }, [state.betAmount, state.cellCount, state.balance]);
+  }, [state.betAmount, state.cellCount, state.balance, t, showToast]);
 
   const selectCell = useCallback(
     async (rowIndex: number, cellIndex: number) => {
@@ -192,19 +48,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
       try {
         const result = await makeStep(state.session.id, cellIndex);
-        dispatch({ type: 'MAKE_STEP', payload: { rowIndex, cellIndex, result } });
+        dispatch(actions.makeStep(rowIndex, cellIndex, result));
 
         if (!result.success) {
           const entry: GameHistoryEntry = {
             id: state.session.id,
             bet: state.session.bet,
-            result: 'lost',
+            result: GameResult.Lost,
             multiplier: state.currentMultiplier,
             payout: 0,
             steps: state.currentStep,
             timestamp: Date.now(),
           };
-          dispatch({ type: 'ADD_HISTORY_ENTRY', payload: entry });
+          dispatch(actions.addHistoryEntry(entry));
         }
       } catch (error) {
         console.error('Failed to make step:', error);
@@ -219,39 +75,39 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
     try {
       const result = await cashout(state.session.id);
-      dispatch({ type: 'CASHOUT', payload: result });
+      dispatch(actions.cashoutAction(result));
 
       const entry: GameHistoryEntry = {
         id: state.session.id,
         bet: state.session.bet,
-        result: 'won',
+        result: GameResult.Won,
         multiplier: result.finalMultiplier,
         payout: result.amount,
         steps: state.currentStep,
         timestamp: Date.now(),
       };
-      dispatch({ type: 'ADD_HISTORY_ENTRY', payload: entry });
+      dispatch(actions.addHistoryEntry(entry));
     } catch (error) {
       console.error('Failed to cashout:', error);
     }
   }, [state.session, state.status, state.currentStep]);
 
-  const resetGame = useCallback(() => {
-    dispatch({ type: 'RESET_GAME' });
+  const handleResetGame = useCallback(() => {
+    dispatch(actions.resetGame());
   }, []);
 
-  const setBetAmount = useCallback(
+  const handleSetBetAmount = useCallback(
     (amount: number) => {
       if (state.status === GameStatus.Playing) return;
-      dispatch({ type: 'SET_BET_AMOUNT', payload: Math.max(1, amount) });
+      dispatch(actions.setBetAmount(Math.max(1, amount)));
     },
     [state.status]
   );
 
-  const setCellCount = useCallback(
+  const handleSetCellCount = useCallback(
     (count: number) => {
       if (state.status === GameStatus.Playing) return;
-      dispatch({ type: 'SET_CELL_COUNT', payload: Math.min(5, Math.max(2, count)) });
+      dispatch(actions.setCellCount(Math.min(MAX_CELL_COUNT, Math.max(MIN_CELL_COUNT, count))));
     },
     [state.status]
   );
@@ -265,9 +121,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     startNewGame,
     selectCell,
     cashoutGame,
-    resetGame,
-    setBetAmount,
-    setCellCount,
+    resetGame: handleResetGame,
+    setBetAmount: handleSetBetAmount,
+    setCellCount: handleSetCellCount,
     getNextMultiplier,
   };
 

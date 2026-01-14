@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useGame } from '../../context/GameContext';
 import { GameStatus } from '../../types/game';
-import { getDifficultyLabel, getWinProbability, getMaxMultiplier } from '../../utils/coefficients';
+import { getDifficultyKey, getWinProbability, getMaxMultiplier } from '../../utils/coefficients';
 import styles from './BetPanel.module.css';
 
 export function BetPanel() {
+  const { t } = useTranslation();
   const {
     state,
     startNewGame,
@@ -36,14 +38,14 @@ export function BetPanel() {
   return (
     <div className={styles.panel}>
       <div className={styles.balance}>
-        <span className={styles.balanceLabel}>Баланс</span>
+        <span className={styles.balanceLabel}>{t('game.balance')}</span>
         <span className={styles.balanceValue}>{balance.toFixed(2)} $</span>
       </div>
 
       {!isPlaying && !isGameOver && (
         <>
           <div className={styles.section}>
-            <label className={styles.label}>Ставка</label>
+            <label className={styles.label}>{t('game.bet')}</label>
             <div className={styles.inputGroup}>
               <input
                 type="number"
@@ -56,14 +58,14 @@ export function BetPanel() {
               <span className={styles.currency}>$</span>
             </div>
             <div className={styles.quickBets}>
-              <button onClick={() => handleQuickBet(0.5)}>½</button>
-              <button onClick={() => handleQuickBet(2)}>2x</button>
-              <button onClick={() => handleQuickBet(-1)}>MAX</button>
+              <button onClick={() => handleQuickBet(0.5)}>{t('quickBet.half')}</button>
+              <button onClick={() => handleQuickBet(2)}>{t('quickBet.double')}</button>
+              <button onClick={() => handleQuickBet(-1)}>{t('quickBet.max')}</button>
             </div>
           </div>
 
           <div className={styles.section}>
-            <label className={styles.label}>Сложность</label>
+            <label className={styles.label}>{t('game.difficulty')}</label>
             <div className={styles.difficultySelector}>
               {[2, 3, 4, 5].map((count) => (
                 <button
@@ -79,7 +81,7 @@ export function BetPanel() {
               ))}
             </div>
             <div className={styles.difficultyInfo}>
-              <span>{getDifficultyLabel(cellCount)}</span>
+              <span>{t(getDifficultyKey(cellCount))}</span>
               <span>Max: {getMaxMultiplier(cellCount).toFixed(2)}x</span>
             </div>
           </div>
@@ -89,7 +91,7 @@ export function BetPanel() {
             onClick={startNewGame}
             disabled={betAmount <= 0 || betAmount > balance}
           >
-            Начать игру
+            {t('game.startGame')}
           </button>
         </>
       )}
@@ -97,18 +99,20 @@ export function BetPanel() {
       {isPlaying && (
         <div className={styles.gameInfo}>
           <div className={styles.multiplierDisplay}>
-            <span className={styles.multiplierLabel}>Текущий коэффициент</span>
+            <span className={styles.multiplierLabel}>{t('game.currentMultiplier')}</span>
             <span className={styles.multiplierValue}>{currentMultiplier.toFixed(2)}x</span>
           </div>
 
           <div className={styles.potentialWin}>
-            <span className={styles.potentialLabel}>Можно забрать</span>
+            <span className={styles.potentialLabel}>{t('game.potentialWin')}</span>
             <span className={styles.potentialValue}>{potentialWin.toFixed(2)} $</span>
           </div>
 
           {currentStep > 0 && (
             <div className={styles.nextMultiplier}>
-              <span>Следующий: {getNextMultiplier().toFixed(2)}x</span>
+              <span>
+                {t('game.nextMultiplier')}: {getNextMultiplier().toFixed(2)}x
+              </span>
             </div>
           )}
 
@@ -117,16 +121,18 @@ export function BetPanel() {
             onClick={cashoutGame}
             disabled={currentStep === 0}
           >
-            Забрать {potentialWin.toFixed(2)} $
+            {t('game.cashout')} {potentialWin.toFixed(2)} $
           </button>
 
-          <div className={styles.stepIndicator}>Шаг {currentStep + 1} из 10</div>
+          <div className={styles.stepIndicator}>
+            {t('game.step')} {currentStep + 1} {t('game.of')} 10
+          </div>
         </div>
       )}
 
       {isGameOver && (
         <button className={styles.resetButton} onClick={resetGame}>
-          Новая игра
+          {t('game.newGame')}
         </button>
       )}
     </div>

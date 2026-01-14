@@ -44,20 +44,20 @@ export function getTotalWinProbability(cellCount: number, steps: number): number
 }
 
 /**
- * Получить описание сложности
+ * Получить ключ сложности для локализации
  */
-export function getDifficultyLabel(cellCount: number): string {
+export function getDifficultyKey(cellCount: number): string {
   switch (cellCount) {
     case 2:
-      return 'Экстремальная';
+      return 'difficulty.extreme';
     case 3:
-      return 'Высокая';
+      return 'difficulty.hard';
     case 4:
-      return 'Средняя';
+      return 'difficulty.medium';
     case 5:
-      return 'Низкая';
+      return 'difficulty.easy';
     default:
-      return 'Неизвестная';
+      return 'difficulty.medium';
   }
 }
 

@@ -1,0 +1,38 @@
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.error {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.success {
+  background: linear-gradient(135deg, #27ae60, #1e8449);
+}
+
+.info {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}

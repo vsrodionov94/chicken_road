@@ -13,6 +13,23 @@ export enum CellStatus {
   Selected = 'selected',
 }
 
+export enum ActionType {
+  SetBetAmount = 'SET_BET_AMOUNT',
+  SetCellCount = 'SET_CELL_COUNT',
+  StartGame = 'START_GAME',
+  MakeStep = 'MAKE_STEP',
+  Cashout = 'CASHOUT',
+  GameOver = 'GAME_OVER',
+  ResetGame = 'RESET_GAME',
+  UpdateBalance = 'UPDATE_BALANCE',
+  AddHistoryEntry = 'ADD_HISTORY_ENTRY',
+}
+
+export enum GameResult {
+  Won = 'won',
+  Lost = 'lost',
+}
+
 export interface Cell {
   index: number;
   status: CellStatus;
@@ -79,7 +96,7 @@ export interface GameState {
 export interface GameHistoryEntry {
   id: string;
   bet: number;
-  result: 'won' | 'lost';
+  result: GameResult;
   multiplier: number;
   payout: number;
   steps: number;
@@ -87,12 +104,15 @@ export interface GameHistoryEntry {
 }
 
 export type GameAction =
-  | { type: 'SET_BET_AMOUNT'; payload: number }
-  | { type: 'SET_CELL_COUNT'; payload: number }
-  | { type: 'START_GAME'; payload: GameSession }
-  | { type: 'MAKE_STEP'; payload: { rowIndex: number; cellIndex: number; result: StepResult } }
-  | { type: 'CASHOUT'; payload: CashoutResult }
-  | { type: 'GAME_OVER'; payload: { trapIndex: number } }
-  | { type: 'RESET_GAME' }
-  | { type: 'UPDATE_BALANCE'; payload: number }
-  | { type: 'ADD_HISTORY_ENTRY'; payload: GameHistoryEntry };
+  | { type: ActionType.SetBetAmount; payload: number }
+  | { type: ActionType.SetCellCount; payload: number }
+  | { type: ActionType.StartGame; payload: GameSession }
+  | {
+      type: ActionType.MakeStep;
+      payload: { rowIndex: number; cellIndex: number; result: StepResult };
+    }
+  | { type: ActionType.Cashout; payload: CashoutResult }
+  | { type: ActionType.GameOver; payload: { trapIndex: number } }
+  | { type: ActionType.ResetGame }
+  | { type: ActionType.UpdateBalance; payload: number }
+  | { type: ActionType.AddHistoryEntry; payload: GameHistoryEntry };

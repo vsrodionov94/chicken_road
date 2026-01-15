@@ -84,6 +84,15 @@
   animation: shake 0.5s ease;
 }
 
+.lostDiceContainer {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  animation: shake 0.5s ease;
+}
+
 @keyframes bounce {
   0%,
   100% {
@@ -131,6 +140,11 @@
   .loseAmount {
     font-size: 1.5rem;
   }
+
+  .lostDiceContainer {
+    gap: 12px;
+    margin: 12px 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -152,6 +166,11 @@
   .winAmount,
   .loseAmount {
     font-size: 1.25rem;
+  }
+
+  .lostDiceContainer {
+    gap: 10px;
+    margin: 10px 0;
   }
 }
 
@@ -178,5 +197,10 @@
   .winAmount,
   .loseAmount {
     font-size: 1.1rem;
+  }
+
+  .lostDiceContainer {
+    gap: 8px;
+    margin: 8px 0;
   }
 }

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useGame } from '../../context/GameContext';
 import { GameStatus, CellStatus, type Row } from '../../types/game';
 import { GameRow } from './GameRow';
+import { Dice } from './Dice';
 import styles from './GameBoard.module.css';
 
 export function GameBoard() {
@@ -98,6 +99,12 @@ export function GameBoard() {
       {status === GameStatus.Lost && (
         <div className={`${styles.overlay} ${styles.lost}`}>
           <p>{t('overlay.youLost')}</p>
+          {state.lastResult?.diceRoll && (
+            <div className={styles.lostDiceContainer}>
+              <Dice value={state.lastResult.diceRoll.dice1} size="large" />
+              <Dice value={state.lastResult.diceRoll.dice2} size="large" />
+            </div>
+          )}
           <span className={styles.loseAmount}>-{state.session?.bet.toFixed(2)} $</span>
         </div>
       )}

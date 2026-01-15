@@ -27,8 +27,8 @@ export function TutorialSteps({ step }: TutorialStepsProps) {
 
             <div className={styles.example}>
               <div className={styles.diceContainer}>
-                <Dice value={4} size="large" />
-                <Dice value={4} size="large" />
+                <Dice value={1} size="large" />
+                <Dice value={1} size="large" />
               </div>
               <p className={styles.dangerText}>{t('tutorial.step1.double')}</p>
             </div>

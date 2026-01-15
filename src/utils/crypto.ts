@@ -100,8 +100,11 @@ export async function verifyGame(
     const dice1 = (dice1Value % 6) + 1;
     const dice2 = (dice2Value % 6) + 1;
 
+    // Проигрыш только на 1_1 или 6_6
+    const expectedIsDouble = (dice1 === 1 && dice2 === 1) || (dice1 === 6 && dice2 === 6);
+
     const claimed = claimedDiceRolls[step];
-    if (claimed.dice1 !== dice1 || claimed.dice2 !== dice2) {
+    if (claimed.dice1 !== dice1 || claimed.dice2 !== dice2 || claimed.isDouble !== expectedIsDouble) {
       return false;
     }
   }

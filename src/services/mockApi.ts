@@ -54,11 +54,12 @@ async function generateDiceRolls(
     const dice1 = (dice1Value % 6) + 1;
     const dice2 = (dice2Value % 6) + 1;
 
-    const isDouble = dice1 === dice2;
+    // Проигрыш только на 1_1 или 6_6
+    const isDouble = (dice1 === 1 && dice2 === 1) || (dice1 === 6 && dice2 === 6);
 
     diceRolls.push({ dice1, dice2, isDouble });
 
-    // Если выпал дубль и это первый дубль, запоминаем шаг
+    // Если выпал проигрышный дубль (1_1 или 6_6) и это первый, запоминаем шаг
     if (isDouble && maxStep === 10) {
       maxStep = step; // Игрок проиграет на этом шаге
     }

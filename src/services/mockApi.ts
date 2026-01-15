@@ -41,10 +41,11 @@ async function generateDiceRolls(
   let maxStep = 10; // По умолчанию можно пройти все 10 шагов
 
   // Генерируем броски кубиков для каждого шага
+  // SHA-256 хеш имеет длину 64 символа, используем по 2 символа на кубик (4 символа на шаг)
   for (let step = 0; step < 10; step++) {
-    // Используем разные части хеша для каждого кубика
-    const dice1Hash = hash.substring(step * 8, step * 8 + 4);
-    const dice2Hash = hash.substring(step * 8 + 4, step * 8 + 8);
+    // Используем разные части хеша для каждого кубика (по 2 символа = 1 байт)
+    const dice1Hash = hash.substring(step * 4, step * 4 + 2);
+    const dice2Hash = hash.substring(step * 4 + 2, step * 4 + 4);
 
     const dice1Value = parseInt(dice1Hash, 16);
     const dice2Value = parseInt(dice2Hash, 16);

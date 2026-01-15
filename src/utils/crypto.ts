@@ -91,8 +91,8 @@ export async function verifyGame(
 
   // Проверяем броски кубиков
   for (let step = 0; step < claimedDiceRolls.length; step++) {
-    const dice1Hash = hash.substring(step * 8, step * 8 + 4);
-    const dice2Hash = hash.substring(step * 8 + 4, step * 8 + 8);
+    const dice1Hash = hash.substring(step * 4, step * 4 + 2);
+    const dice2Hash = hash.substring(step * 4 + 2, step * 4 + 4);
 
     const dice1Value = parseInt(dice1Hash, 16);
     const dice2Value = parseInt(dice2Hash, 16);

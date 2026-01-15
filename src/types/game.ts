@@ -30,10 +30,17 @@ export enum GameResult {
   Lost = 'lost',
 }
 
+export interface DiceRoll {
+  dice1: number; // 1-6
+  dice2: number; // 1-6
+  isDouble: boolean; // true если дубль (проигрыш)
+}
+
 export interface Cell {
   index: number;
   status: CellStatus;
   isTrap: boolean;
+  diceRoll?: DiceRoll; // Бросок кубиков для этой ячейки
 }
 
 export interface Row {
@@ -49,8 +56,8 @@ export interface GameSession {
   clientSeed: string;
   nonce: number;
   cellCount: number;
-  safePath: number[]; // Индексы безопасных ячеек для каждого ряда (предопределенный путь)
-  maxStep: number; // Максимальное количество шагов до проигрыша
+  diceRolls: DiceRoll[]; // Броски кубиков для каждого шага
+  maxStep: number; // Шаг на котором выпадет дубль (проигрыш)
   bet: number;
   currentStep: number;
   currentMultiplier: number;
@@ -60,7 +67,7 @@ export interface GameSession {
 
 export interface StepResult {
   success: boolean;
-  safeIndex: number; // Индекс безопасной ячейки на этом шаге
+  diceRoll: DiceRoll; // Бросок кубиков на этом шаге
   newMultiplier: number;
   potentialWin: number;
 }
@@ -76,7 +83,7 @@ export interface VerificationData {
   serverSeedHash: string;
   clientSeed: string;
   nonce: number;
-  trapPositions: number[];
+  diceRolls: DiceRoll[];
   isValid: boolean;
 }
 

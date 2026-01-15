@@ -77,8 +77,7 @@ export async function verifyGame(
   serverSeedHash: string,
   clientSeed: string,
   nonce: number,
-  cellCount: number,
-  claimedPositions: number[]
+  claimedDiceRolls: { dice1: number; dice2: number; isDouble: boolean }[]
 ): Promise<boolean> {
   // Проверяем, что хеш сида совпадает
   const calculatedHash = await sha256(serverSeed);
@@ -86,16 +85,28 @@ export async function verifyGame(
     return false;
   }
 
-  // Проверяем позиции ловушек
-  const calculatedPositions = await generateTrapPositions(
-    serverSeed,
-    clientSeed,
-    nonce,
-    cellCount,
-    claimedPositions.length
-  );
+  // Генерируем хеш для проверки бросков кубиков
+  const combined = `${serverSeed}-${clientSeed}-${nonce}`;
+  const hash = await sha256(combined);
 
-  return calculatedPositions.every((pos, index) => pos === claimedPositions[index]);
+  // Проверяем броски кубиков
+  for (let step = 0; step < claimedDiceRolls.length; step++) {
+    const dice1Hash = hash.substring(step * 8, step * 8 + 4);
+    const dice2Hash = hash.substring(step * 8 + 4, step * 8 + 8);
+
+    const dice1Value = parseInt(dice1Hash, 16);
+    const dice2Value = parseInt(dice2Hash, 16);
+
+    const dice1 = (dice1Value % 6) + 1;
+    const dice2 = (dice2Value % 6) + 1;
+
+    const claimed = claimedDiceRolls[step];
+    if (claimed.dice1 !== dice1 || claimed.dice2 !== dice2) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**

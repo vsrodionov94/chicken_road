@@ -1,0 +1,110 @@
+.dice {
+  position: relative;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
+  padding: 4px;
+}
+
+.dice.small {
+  width: 30px;
+  height: 30px;
+}
+
+.dice.medium {
+  width: 40px;
+  height: 40px;
+}
+
+.dice.large {
+  width: 50px;
+  height: 50px;
+}
+
+.dot {
+  width: 100%;
+  height: 100%;
+  background: var(--text-primary);
+  border-radius: 50%;
+}
+
+/* Позиционирование точек */
+.dot.top-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.dot.top-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.dot.middle-left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.dot.center {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.dot.middle-right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.dot.bottom-left {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.dot.bottom-right {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+@media (max-width: 900px) {
+  .dice.small {
+    width: 24px;
+    height: 24px;
+  }
+
+  .dice.medium {
+    width: 32px;
+    height: 32px;
+  }
+
+  .dice.large {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dice.small {
+    width: 20px;
+    height: 20px;
+  }
+
+  .dice.medium {
+    width: 28px;
+    height: 28px;
+  }
+
+  .dice.large {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dice {
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 3px;
+    gap: 1px;
+  }
+}

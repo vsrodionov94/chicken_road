@@ -38,22 +38,20 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       const { result } = action.payload;
       // rowIndex - это индекс ряда, на который кликнули (следующий шаг)
       const rowIndex = state.currentStep + 1;
-      const safeIndex = result.safeIndex;
+      const diceRoll = result.diceRoll;
 
       const newRows = state.rows.map((row, idx) => {
         if (idx !== rowIndex) return row;
 
+        // Обновляем первую ячейку (мы показываем только одну ячейку с кубиками)
         const newCells: Cell[] = row.cells.map((cell, cIdx) => {
-          if (cIdx === safeIndex) {
+          if (cIdx === 0) {
             return {
               ...cell,
               status: result.success ? CellStatus.Safe : CellStatus.Trap,
               isTrap: !result.success,
+              diceRoll: diceRoll,
             };
-          }
-          // Если проиграли, показываем все остальные ячейки как безопасные
-          if (!result.success) {
-            return { ...cell, status: CellStatus.Safe };
           }
           return cell;
         });
@@ -61,8 +59,8 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         return {
           ...row,
           cells: newCells,
-          isRevealed: !result.success,
-          selectedCellIndex: safeIndex,
+          isRevealed: true,
+          selectedCellIndex: 0,
         };
       });
 

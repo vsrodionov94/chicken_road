@@ -37,6 +37,7 @@ export function GameRow({ row, cellCount, isActive, isPassed, isNext, onRowClick
           status={cellToShow.status}
           isActive={isActive}
           onClick={() => {}}
+          diceRoll={cellToShow.diceRoll}
         />
       </div>
       <div className={styles.stepNumber}>

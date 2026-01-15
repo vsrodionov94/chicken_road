@@ -4,114 +4,66 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-/* Верхняя секция: Баланс / Правила / Выигрыш */
-.topSection {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
-.infoCard {
+.balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
   background: var(--bg-tertiary);
   border-radius: 8px;
-  padding: 12px;
+}
+
+.balanceLabel {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.balanceValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.section {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  text-align: center;
 }
 
-.infoLabel {
+.label {
   font-size: 0.75rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
 
-.infoValue {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent-green);
-}
-
-.rulesText {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--accent-red);
-}
-
-.winValue {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent-yellow);
-}
-
-/* Средняя секция: Ставка / ИГРАТЬ / Автоплей */
-.middleSection {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  align-items: center;
-}
-
-.betControl,
-.autoplayControl {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.adjustBtn {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: 1.25rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.adjustBtn:hover:not(:disabled) {
-  border-color: var(--accent-yellow);
-  background: var(--bg-secondary);
-}
-
-.adjustBtn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.betInputWrapper {
+.inputGroup {
   position: relative;
-  flex: 1;
-  max-width: 120px;
+  display: flex;
+  align-items: center;
 }
 
-.betInput {
+.input {
   width: 100%;
-  padding: 10px 32px 10px 12px;
+  padding: 8px 32px 8px 12px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--text-primary);
   font-size: 1rem;
   font-weight: 600;
   outline: none;
   transition: border-color 0.2s;
-  text-align: center;
 }
 
-.betInput:focus {
+.input:focus {
   border-color: var(--accent-yellow);
 }
 
-.betInput::-webkit-outer-spin-button,
-.betInput::-webkit-inner-spin-button {
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -119,76 +71,26 @@
 .currency {
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
   color: var(--text-secondary);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
 }
 
-.playButton {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(0, 210, 106, 0.3);
-}
-
-.playButton:hover:not(:disabled) {
-  transform: scale(1.05);
-  box-shadow: 0 6px 30px rgba(0, 210, 106, 0.5);
-}
-
-.playButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.autoplayDisplay {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  min-width: 80px;
-}
-
-.autoplayLabel {
-  font-size: 0.65rem;
-  color: var(--text-secondary);
-}
-
-.autoplayValue {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-/* Быстрые ставки */
 .quickBets {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .quickBets button {
   flex: 1;
-  padding: 10px;
+  padding: 6px;
   background: var(--bg-tertiary);
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
   color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 500;
   transition: all 0.2s;
-  cursor: pointer;
 }
 
 .quickBets button:hover {
@@ -197,63 +99,130 @@
   color: var(--accent-yellow);
 }
 
-/* Во время игры */
-.gameSection {
+.difficultySelector {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gameStats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.statItem {
-  background: var(--bg-tertiary);
-  border-radius: 8px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
   gap: 6px;
+}
+
+.difficultyBtn {
+  flex: 1;
+  padding: 8px 4px;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 2px;
+  transition: all 0.2s;
 }
 
-.statLabel {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.difficultyBtn:hover {
+  border-color: var(--accent-yellow);
 }
 
-.multiplierValue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--accent-yellow);
+.difficultyBtn.active {
+  border-color: var(--accent-yellow);
+  background: rgba(255, 193, 7, 0.1);
 }
 
-.stepValue {
-  font-size: 1.25rem;
+.difficultyCount {
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
+.difficultyLabel {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.difficultyInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.startButton {
+  padding: 12px;
+  background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.startButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 210, 106, 0.3);
+}
+
+.startButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.multiplierDisplay,
+.potentialWin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+}
+
+.multiplierLabel,
+.potentialLabel {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.multiplierValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-yellow);
+}
+
+.potentialValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.nextMultiplier {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
 .cashoutButton {
-  padding: 16px;
+  padding: 12px;
   background: linear-gradient(135deg, var(--accent-yellow) 0%, #e6a800 100%);
   border: none;
   border-radius: 8px;
   color: var(--bg-primary);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  cursor: pointer;
 }
 
 .cashoutButton:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
 }
 
 .cashoutButton:disabled {
@@ -261,8 +230,14 @@
   cursor: not-allowed;
 }
 
+.stepIndicator {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
 .resetButton {
-  padding: 14px;
+  padding: 12px;
   background: var(--bg-tertiary);
   border: 2px solid var(--border-color);
   border-radius: 8px;
@@ -270,7 +245,6 @@
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s;
-  cursor: pointer;
 }
 
 .resetButton:hover {
@@ -278,78 +252,254 @@
   background: rgba(52, 152, 219, 0.1);
 }
 
-/* Адаптивность */
 @media (max-width: 900px) {
   .panel {
-    padding: 12px;
-    gap: 12px;
-  }
-
-  .topSection {
+    padding: 10px;
     gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
-  .infoCard {
-    padding: 8px;
+  .balance {
+    padding: 6px 10px;
+    flex: 1;
+    min-width: 120px;
   }
 
-  .middleSection {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .playButton {
-    width: 100px;
-    height: 100px;
+  .balanceValue {
     font-size: 1rem;
-    margin: 0 auto;
   }
 
-  .betControl,
-  .autoplayControl {
-    justify-content: center;
+  .section {
+    flex: 1;
+    min-width: 140px;
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 0.65rem;
+  }
+
+  .input {
+    padding: 6px 28px 6px 10px;
+    font-size: 0.875rem;
+  }
+
+  .quickBets {
+    gap: 4px;
+  }
+
+  .quickBets button {
+    padding: 4px;
+    font-size: 0.7rem;
+  }
+
+  .difficultySelector {
+    gap: 4px;
+  }
+
+  .difficultyBtn {
+    padding: 6px 2px;
+  }
+
+  .difficultyCount {
+    font-size: 0.875rem;
+  }
+
+  .difficultyLabel {
+    font-size: 0.6rem;
+  }
+
+  .difficultyInfo {
+    font-size: 0.65rem;
+  }
+
+  .startButton {
+    padding: 10px;
+    font-size: 0.875rem;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .gameInfo {
+    flex: 1;
+    min-width: 200px;
+    gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .multiplierDisplay,
+  .potentialWin {
+    padding: 6px 10px;
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .multiplierLabel,
+  .potentialLabel {
+    font-size: 0.65rem;
+  }
+
+  .multiplierValue,
+  .potentialValue {
+    font-size: 1rem;
+  }
+
+  .nextMultiplier {
+    font-size: 0.65rem;
+    width: 100%;
+  }
+
+  .cashoutButton {
+    padding: 10px;
+    font-size: 0.875rem;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .stepIndicator {
+    font-size: 0.65rem;
+  }
+
+  .resetButton {
+    padding: 10px;
+    font-size: 0.875rem;
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .panel {
-    padding: 10px;
-    gap: 10px;
-  }
-
-  .topSection {
-    grid-template-columns: 1fr;
+    padding: 8px;
     gap: 6px;
   }
 
-  .infoCard {
+  .balance {
+    padding: 5px 8px;
+    min-width: 100px;
+  }
+
+  .balanceValue {
+    font-size: 0.9rem;
+  }
+
+  .section {
+    min-width: 120px;
+  }
+
+  .startButton,
+  .cashoutButton,
+  .resetButton {
+    padding: 8px;
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+
+  .gameInfo {
+    min-width: 160px;
+  }
+
+  .multiplierDisplay,
+  .potentialWin {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 390px) {
+  .panel {
     padding: 6px;
+    gap: 5px;
   }
 
-  .infoValue,
-  .winValue {
-    font-size: 1rem;
+  .balance {
+    padding: 4px 6px;
+    min-width: 90px;
   }
 
-  .playButton {
-    width: 80px;
-    height: 80px;
-    font-size: 0.9rem;
+  .balanceLabel {
+    font-size: 0.65rem;
   }
 
-  .adjustBtn {
-    width: 36px;
-    height: 36px;
-    font-size: 1.1rem;
+  .balanceValue {
+    font-size: 0.8rem;
   }
 
-  .betInput {
-    padding: 8px 28px 8px 10px;
-    font-size: 0.9rem;
+  .section {
+    min-width: 100px;
+    gap: 3px;
   }
 
-  .cashoutButton {
-    padding: 12px;
-    font-size: 1rem;
+  .label {
+    font-size: 0.6rem;
+  }
+
+  .input {
+    padding: 5px 24px 5px 8px;
+    font-size: 0.8rem;
+  }
+
+  .currency {
+    font-size: 0.75rem;
+    right: 8px;
+  }
+
+  .quickBets button {
+    padding: 3px;
+    font-size: 0.65rem;
+  }
+
+  .difficultyBtn {
+    padding: 4px 2px;
+  }
+
+  .difficultyCount {
+    font-size: 0.8rem;
+  }
+
+  .difficultyLabel {
+    font-size: 0.55rem;
+  }
+
+  .difficultyInfo {
+    font-size: 0.6rem;
+  }
+
+  .startButton,
+  .cashoutButton,
+  .resetButton {
+    padding: 6px;
+    font-size: 0.75rem;
+    min-width: 80px;
+  }
+
+  .gameInfo {
+    min-width: 140px;
+    gap: 4px;
+  }
+
+  .multiplierDisplay,
+  .potentialWin {
+    padding: 4px 6px;
+    min-width: 80px;
+  }
+
+  .multiplierLabel,
+  .potentialLabel {
+    font-size: 0.6rem;
+  }
+
+  .multiplierValue,
+  .potentialValue {
+    font-size: 0.85rem;
+  }
+
+  .nextMultiplier {
+    font-size: 0.6rem;
+  }
+
+  .stepIndicator {
+    font-size: 0.6rem;
   }
 }

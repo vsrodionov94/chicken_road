@@ -163,7 +163,7 @@ export async function cashout(sessionId: string): Promise<CashoutResult> {
     throw new Error('Game is not in playing state');
   }
 
-  if (session.currentStep === 0) {
+  if (session.currentStep < 0) {
     throw new Error('Cannot cashout without making any steps');
   }
 

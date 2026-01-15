@@ -30,6 +30,12 @@
   font-size: 1.75rem;
 }
 
+.headerButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .main {
   flex: 1;
   display: flex;

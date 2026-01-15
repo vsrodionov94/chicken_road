@@ -1,0 +1,36 @@
+.helpButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.helpButton:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+  transform: scale(1.1);
+}
+
+.helpButton:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .helpButton {
+    width: 36px;
+    height: 36px;
+  }
+
+  .helpButton svg {
+    width: 20px;
+    height: 20px;
+  }
+}
